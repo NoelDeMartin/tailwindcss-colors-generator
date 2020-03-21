@@ -1,5 +1,6 @@
 <template>
     <button
+        type="button"
         class="flex items-center justify-center text-white font-medium py-2 px-4 rounded bg-teal-500 hover:bg-teal-700"
         @click="exportColors"
     >
@@ -14,7 +15,7 @@ import Vue from 'vue';
 export default Vue.extend({
     props: {
         colors: {
-            type: Object as () => Colors,
+            type: Array as () => ColorDefinition[],
             required: true,
         },
     },
@@ -22,18 +23,29 @@ export default Vue.extend({
         exportColors() {
             const lines = [
                 'module.exports = {',
-                '    colors: {',
-                '        primary: {',
-                ...Object
-                    .entries(this.colors)
-                    .map(([shade, color]) => `            ${shade}: '${color}',`),
+                '   theme: {',
+                '       colors: {',
+            ];
+
+            for (const color of this.colors) {
+                lines.push(`            ${color.name}: {`);
+                lines.push(
+                    ...Object
+                        .entries(color.shades)
+                        .map(([shade, color]) => `                ${shade}: '${color}',`),
+                );
+                lines.push('            },');
+            }
+
+            lines.push(...[
                 '        },',
                 '    },',
                 '};',
                 '',
-            ];
+            ]);
+
             const url = window.URL.createObjectURL(
-                new Blob([lines.join("\n")], {type: 'application/javascript'}),
+                new Blob([lines.join('\n')], {type: 'application/javascript'}),
             );
             const anchor = document.createElement('a');
             anchor.style.display = 'none';

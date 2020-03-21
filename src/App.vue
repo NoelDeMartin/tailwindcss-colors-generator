@@ -1,148 +1,84 @@
 <template>
     <div
         id="app"
-        class="w-screen h-screen overflow-x-hidden font-ubuntu"
+        class="flex flex-col w-screen h-screen overflow-x-hidden font-ubuntu bg-gray-200"
     >
-        <div class="overflow-y-auto w-full p-4 pb-8 bg-gray-200">
-            <div class="max-w-content mx-auto mb-6 flex flex-col items-center md:flex-row">
-                <h1 class="font-medium text-3xl text-center mb-4 md:mb-0">
-                    TailwindCSS Colors Generator
-                </h1>
+        <div ref="scroll" class="flex-grow overflow-y-auto w-full p-4 pb-8">
+            <div class="flex flex-col max-w-content mx-auto pb-10">
+                <div class="mb-6 flex flex-col items-center md:flex-row">
+                    <h1 class="font-medium text-3xl text-center mb-4 md:mb-0">
+                        TailwindCSS Colors Generator
+                    </h1>
 
-                <div class="flex-grow" />
-
-                <ImportButton class="self-center" @updateColors="updateColors" />
-            </div>
-
-            <div class="flex flex-col bg-white w-full max-w-content mx-auto p-6 rounded-lg shadow">
-                <div class="flex mb-2">
-                    <h2 class="text-xl">
-                        Choose the base color first
-                    </h2>
                     <div class="flex-grow" />
-                    <PreviewTitle class="hidden md:flex" />
+
+                    <button
+                        type="button"
+                        class="flex items-center font-medium text-sm py-2 px-4 rounded text-teal-700 hover:bg-gray-300"
+                        @click="loadDefaults"
+                    >
+                        Load defaults
+                    </button>
+
+                    <ImportButton class="self-center" @updateColors="updateColors" />
                 </div>
 
-                <div class="flex flex-col mb-2 md:flex-row">
-                    <ColorPicker v-model="colors[500]" shade="500" />
+                <ul class="rounded bg-white shadow mb-4">
+                    <li
+                        v-for="(color, index) of colors"
+                        :key="index"
+                        class="cursor-pointer flex flex-col p-4 border-b border-gray-400 last:border-b-0 hover:bg-gray-300"
+                        :class="{ 'bg-gray-300': index === activeColor }"
+                        @click="toggleColor(index)"
+                    >
+                        <div class="flex items-center">
+                            <input
+                                v-model="color.name"
+                                type="text"
+                                class="mr-2 w-32 font-bold bg-transparent"
+                                @click.stop=""
+                            >
 
-                    <div class="flex-grow" />
-
-                    <div class="flex flex-col mt-2 items-end md:mt-0">
-                        <PreviewTitle class="flex mb-2 md:hidden" />
-                        <button
-                            class="text-white font-bold py-2 px-4 rounded w-64"
-                            :style="{ background: buttonHovered ? colors[700] : colors[500] }"
-                            @mouseenter="buttonHovered = true"
-                            @mouseleave="buttonHovered = false"
-                        >
-                            GET STARTED
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex mt-4 mb-2">
-                    <h2 class="text-xl">
-                        Finding the edges
-                    </h2>
-                    <div class="flex-grow" />
-                    <PreviewTitle class="hidden md:flex" />
-                </div>
-
-                <div class="flex flex-col mb-2 md:flex-row">
-                    <div class="flex">
-                        <ColorPicker v-model="colors[100]" shade="100" class="mr-2" />
-                        <ColorPicker v-model="colors[900]" shade="900" />
-                    </div>
-
-                    <div class="flex-grow" />
-
-                    <div class="flex flex-col mt-2 items-end md:mt-0">
-                        <PreviewTitle class="flex mb-2 md:hidden" />
-                        <div
-                            class="border px-4 py-3 rounded relative"
-                            :style="{
-                                background: colors[100],
-                                borderColor: colors[400],
-                                color: colors[900],
-                            }"
-                        >
-                            <p class="font-medium">
-                                Our privacy policy has changed
-                            </p>
-                            <p class="text-sm" :style="{ color: colors[700] }">
-                                Make sure you know how these changes affect you.
-                            </p>
+                            <div class="hidden border border-gray-300 mr-4 md:flex">
+                                <div
+                                    v-for="(shadeValue, shadeName) of color.shades"
+                                    :key="shadeName"
+                                    class="w-8 h-8"
+                                    :style="{ background: shadeValue }"
+                                />
+                            </div>
+                            <div class="flex-grow" />
+                            <RemoveButton @click.stop="removeColor(index)" />
                         </div>
-                    </div>
-                </div>
-
-                <div class="flex mt-4 my-2">
-                    <h2 class="text-xl">
-                        Filling in the gaps
-                    </h2>
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[100] }" />
-                    <ColorPicker v-model="colors[300]" shade="300" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[500] }" />
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[500] }" />
-                    <ColorPicker v-model="colors[700]" shade="700" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[900] }" />
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[100] }" />
-                    <ColorPicker v-model="colors[200]" shade="200" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[300] }" />
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[300] }" />
-                    <ColorPicker v-model="colors[400]" shade="400" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[500] }" />
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[500] }" />
-                    <ColorPicker v-model="colors[600]" shade="600" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[700] }" />
-                </div>
-
-                <div class="flex items-center mb-2">
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[700] }" />
-                    <ColorPicker v-model="colors[800]" shade="800" class="mr-2" />
-                    <div class="w-12 h-12 mr-2 border border-gray-300" :style="{ background: colors[900] }" />
-                </div>
-
-                <div class="flex flex-col items-center bg-gray-300 mt-6 -mx-6 -mb-6 p-6">
-                    <div class="mb-3">
-                        <div class="flex border border-gray-300 mr-4">
+                        <div class="flex border border-gray-300 mt-4 md:hidden">
                             <div
-                                v-for="(color, shade) of colors"
-                                :key="shade"
+                                v-for="(shadeValue, shadeName) of color.shades"
+                                :key="shadeName"
                                 class="w-8 h-8"
-                                :style="{ background: colors[shade] }"
+                                :style="{ background: shadeValue }"
                             />
                         </div>
-                    </div>
+                    </li>
+                    <li>
+                        <button
+                            type="button"
+                            class="flex justify-center items-center w-full text-white text-lg p-3 rounded-b bg-blue-500 hover:bg-blue-700"
+                            @click="addColor"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-5 h-5 fill-current mr-2"><path d="M11 9V5H9v4H5v2h4v4h2v-4h4V9h-4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20z" /></svg>
+                            add new color
+                        </button>
+                    </li>
+                </ul>
 
-                    <div class="flex flex-row flex-wrap justify-center items-center -m-1">
-                        <ColorPicker
-                            v-for="(color, shade) of colors"
-                            :key="shade"
-                            v-model="colors[shade]"
-                            :shade="shade"
-                            class="m-1"
-                        />
-                    </div>
+                <ExportButton ref="export-button" class="w-64 mt-2 self-end" :colors="colors" />
 
-                    <ExportButton class="w-64 mt-4" :colors="colors" />
-                </div>
+                <template v-if="activeColor !== null">
+                    <h2 class="text-2xl mb-2">
+                        <strong>{{ colors[activeColor].name }}</strong>
+                    </h2>
+                    <ColorShadesEditor :shades="colors[activeColor].shades" />
+                </template>
             </div>
         </div>
         <AppFooter />
@@ -152,39 +88,73 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import { animate } from '@/utils/animations';
+import { BASIC_COLORS, DEFAULT_COLORS, GRAY_SHADES } from '@/utils/tailwind-colors';
+
 import AppFooter from '@/components/AppFooter.vue';
-import ColorPicker from '@/components/ColorPicker.vue';
+import ColorShadesEditor from '@/components/ColorShadesEditor.vue';
 import ExportButton from '@/components/ExportButton.vue';
 import ImportButton from '@/components/ImportButton.vue';
-import PreviewTitle from '@/components/PreviewTitle.vue';
+import RemoveButton from '@/components/RemoveButton.vue';
+
+interface Data {
+    activeColor: number | null;
+    colors: ColorDefinition[];
+}
 
 export default Vue.extend({
     components: {
         AppFooter,
-        ColorPicker,
+        ColorShadesEditor,
         ExportButton,
         ImportButton,
-        PreviewTitle,
+        RemoveButton,
     },
-    data: () => ({
-        colors: {
-            100: '#EBF8FF',
-            200: '#BEE3F8',
-            300: '#90CDF4',
-            400: '#63B3ED',
-            500: '#4299E1',
-            600: '#3182CE',
-            700: '#2B6CB0',
-            800: '#2C5282',
-            900: '#2A4365',
-        },
-        buttonHovered: false,
+    data: (): Data => ({
+        activeColor: 0,
+        colors: BASIC_COLORS,
     }),
     methods: {
-        updateColors(newColors: Colors) {
-            for (const [shade, color] of Object.entries(newColors)) {
-                (this.colors as any)[shade] = color;
+        updateColors(colors: ColorDefinition[]): void {
+            this.colors = colors;
+        },
+        loadDefaults() {
+            this.colors = DEFAULT_COLORS;
+        },
+        addColor() {
+            this.colors.push({
+                name: 'new-color',
+                shades: GRAY_SHADES,
+            });
+
+            this.activeColor = this.colors.length - 1;
+        },
+        removeColor(index: number) {
+            this.colors.splice(index, 1);
+
+            if (this.activeColor === null)
+                return;
+
+            if (this.activeColor >= index)
+                this.activeColor = index > 0 ? this.activeColor - 1 : null;
+        },
+        toggleColor(index: number) {
+            if (this.activeColor === index) {
+                this.activeColor = null;
+
+                return;
             }
+
+            this.activeColor = index;
+
+            const scroll = this.$refs.scroll as HTMLDivElement;
+            const exportButton = (this.$refs['export-button'] as Vue).$el as HTMLButtonElement;
+            const scrollStart = scroll.scrollTop;
+            const scrollEnd = exportButton.offsetTop + exportButton.clientHeight;
+
+            animate(progress => {
+                scroll.scrollTo({ top: scrollStart * (1 - progress) + scrollEnd * progress });
+            }, 300);
         },
     },
 });
