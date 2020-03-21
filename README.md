@@ -1,24 +1,5 @@
-# tailwindcss-colors-generator
+# TailwindCSS Colors Generator
 
-## Project setup
-```
-npm install
-```
+UI for picking colors to use in your [TailwindCSS](https://tailwindcss.com/) config.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[noeldemartin.github.io/tailwindcss-colors-generator](https://noeldemartin.github.io/tailwindcss-colors-generator)

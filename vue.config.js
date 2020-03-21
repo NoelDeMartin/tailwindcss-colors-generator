@@ -1,8 +1,11 @@
 const version = require('./package.json').version;
 
 module.exports = {
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/tailwindcss-colors-generator/'
+        : '/',
     pwa: {
-        name: 'Media Tracker',
+        name: 'TailwindCSS Colors Generator',
         themeColor: '#319795',
         msTileColor: '#319795',
         manifestOptions: {

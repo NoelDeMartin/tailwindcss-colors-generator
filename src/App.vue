@@ -3,7 +3,7 @@
         id="app"
         class="w-screen h-screen overflow-x-hidden font-ubuntu"
     >
-        <div class="overflow-y-auto w-full p-4 bg-gray-200">
+        <div class="overflow-y-auto w-full p-4 pb-8 bg-gray-200">
             <div class="max-w-content mx-auto mb-6 flex flex-col items-center md:flex-row">
                 <h1 class="font-semibold text-3xl mb-4 md:mb-0">
                     TailwindCSS Colors Generator
@@ -145,12 +145,14 @@
                 </div>
             </div>
         </div>
+        <AppFooter />
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
+import AppFooter from '@/components/AppFooter.vue';
 import ColorPicker from '@/components/ColorPicker.vue';
 import ExportButton from '@/components/ExportButton.vue';
 import ImportButton from '@/components/ImportButton.vue';
@@ -158,6 +160,7 @@ import PreviewTitle from '@/components/PreviewTitle.vue';
 
 export default Vue.extend({
     components: {
+        AppFooter,
         ColorPicker,
         ExportButton,
         ImportButton,
