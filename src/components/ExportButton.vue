@@ -1,6 +1,6 @@
 <template>
     <button
-        class="flex items-center justify-center text-white font-medium py-2 px-4 rounded bg-orange-500 hover:bg-orange-700"
+        class="flex items-center justify-center text-white font-medium py-2 px-4 rounded bg-teal-500 hover:bg-teal-700"
         @click="exportColors"
     >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-4 h-4 fill-current mr-2"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>

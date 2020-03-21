@@ -5,18 +5,18 @@
     >
         <div class="overflow-y-auto w-full p-4 pb-8 bg-gray-200">
             <div class="max-w-content mx-auto mb-6 flex flex-col items-center md:flex-row">
-                <h1 class="font-semibold text-3xl mb-4 md:mb-0">
+                <h1 class="font-medium text-3xl text-center mb-4 md:mb-0">
                     TailwindCSS Colors Generator
                 </h1>
 
                 <div class="flex-grow" />
 
-                <ImportButton class="self-end md:self-center" @updateColors="updateColors" />
+                <ImportButton class="self-center" @updateColors="updateColors" />
             </div>
 
             <div class="flex flex-col bg-white w-full max-w-content mx-auto p-6 rounded-lg shadow">
                 <div class="flex mb-2">
-                    <h2 class="font-medium text-xl">
+                    <h2 class="text-xl">
                         Choose the base color first
                     </h2>
                     <div class="flex-grow" />
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="flex mt-4 mb-2">
-                    <h2 class="font-medium text-xl">
+                    <h2 class="text-xl">
                         Finding the edges
                     </h2>
                     <div class="flex-grow" />
@@ -67,10 +67,10 @@
                                 color: colors[900],
                             }"
                         >
-                            <p class="font-semibold">
+                            <p class="font-medium">
                                 Our privacy policy has changed
                             </p>
-                            <p class="text-sm">
+                            <p class="text-sm" :style="{ color: colors[700] }">
                                 Make sure you know how these changes affect you.
                             </p>
                         </div>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="flex mt-4 my-2">
-                    <h2 class="font-medium text-xl">
+                    <h2 class="text-xl">
                         Filling in the gaps
                     </h2>
                 </div>
