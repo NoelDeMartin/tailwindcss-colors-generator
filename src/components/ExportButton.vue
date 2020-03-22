@@ -27,16 +27,18 @@ export default Vue.extend({
                 '       colors: {',
             ];
 
+            const formatObjectKey = (name: string) => /-\s/.test(name) ? `'${name}'` : name;
+
             for (const color of this.colors) {
                 const shadeEntries = Object.entries(color.shades);
 
                 if (shadeEntries.length === 1 && shadeEntries[0][0] === 'default') {
-                    lines.push(`            ${color.name}: '${shadeEntries[0][1]}',`);
+                    lines.push(`            ${formatObjectKey(color.name)}: '${shadeEntries[0][1]}',`);
 
                     continue;
                 }
 
-                lines.push(`            ${color.name}: {`);
+                lines.push(`            ${formatObjectKey(color.name)}: {`);
                 lines.push(
                     ...shadeEntries
                         .map(([shade, color]) => `                ${shade}: '${color}',`),

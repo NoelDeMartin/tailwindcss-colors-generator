@@ -22,14 +22,8 @@ export default Vue.extend({
 
             eval(data);
 
-            const {
-                exports: {
-                    theme: {
-                        colors: customColors,
-                        extend: { colors: extendedColors },
-                    },
-                },
-            } = module;
+            const customColors = module.exports?.theme?.colors;
+            const extendedColors = module.exports?.theme?.extend?.colors;
 
             if (customColors) {
                 this.$emit('updateColors', this.parseColors(customColors));
