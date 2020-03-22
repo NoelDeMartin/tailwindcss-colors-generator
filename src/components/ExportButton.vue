@@ -28,10 +28,17 @@ export default Vue.extend({
             ];
 
             for (const color of this.colors) {
+                const shadeEntries = Object.entries(color.shades);
+
+                if (shadeEntries.length === 1 && shadeEntries[0][0] === 'default') {
+                    lines.push(`            ${color.name}: '${shadeEntries[0][1]}',`);
+
+                    continue;
+                }
+
                 lines.push(`            ${color.name}: {`);
                 lines.push(
-                    ...Object
-                        .entries(color.shades)
+                    ...shadeEntries
                         .map(([shade, color]) => `                ${shade}: '${color}',`),
                 );
                 lines.push('            },');

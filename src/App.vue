@@ -89,7 +89,8 @@
 import Vue from 'vue';
 
 import { animate } from '@/utils/animations';
-import { BASIC_COLORS, DEFAULT_COLORS, GRAY_SHADES } from '@/utils/tailwind-colors';
+import { BASIC_COLORS, DEFAULT_COLORS, DEFAULT_SHADES } from '@/utils/tailwind-colors';
+import Obj from '@/utils/Obj';
 
 import AppFooter from '@/components/AppFooter.vue';
 import ColorShadesEditor from '@/components/ColorShadesEditor.vue';
@@ -112,19 +113,19 @@ export default Vue.extend({
     },
     data: (): Data => ({
         activeColor: 0,
-        colors: BASIC_COLORS,
+        colors: Obj.deepClone(BASIC_COLORS),
     }),
     methods: {
         updateColors(colors: ColorDefinition[]): void {
             this.colors = colors;
         },
         loadDefaults() {
-            this.colors = DEFAULT_COLORS;
+            this.colors = Obj.deepClone(DEFAULT_COLORS);
         },
         addColor() {
             this.colors.push({
                 name: 'new-color',
-                shades: GRAY_SHADES,
+                shades: Obj.deepClone(DEFAULT_SHADES),
             });
 
             this.activeColor = this.colors.length - 1;
